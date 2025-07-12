@@ -1,4 +1,5 @@
-﻿using EndpointMaxResponseTime.Services;
+﻿using System.Net;
+using EndpointMaxResponseTime.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EndpointMaxResponseTime.Controllers;
@@ -15,7 +16,11 @@ public class SubmissionsController(
     {
         var submissionId = await submissionsService.CreateAsync();
         var submission = submissionsRepository.Get(submissionId);
-        if (!submission!.Phase2CompletedAt.HasValue)
+        if (submission == null)
+        {
+            return StatusCode((int)HttpStatusCode.GatewayTimeout);
+        }
+        if (!submission.Phase2CompletedAt.HasValue)
         {
             return Accepted(submission);
         }

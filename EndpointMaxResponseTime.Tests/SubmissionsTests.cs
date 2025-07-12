@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Json;
 using EndpointMaxResponseTime.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -60,9 +61,9 @@ public class SubmissionsTests
     }
 
     [Test]
-    public async Task SlowResponseTest()
+    public async Task SlowResponseAfterPointOfNoReturnTest()
     {
-        SetUpApiResponses(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+        SetUpApiResponses(TimeSpan.FromSeconds(0.6), TimeSpan.FromSeconds(0.6));
 
         using var httpClient = _factory.CreateClient();
 
@@ -74,7 +75,7 @@ public class SubmissionsTests
         stopwatch.ElapsedMilliseconds.ShouldBeInRange(1000, 1100);
         submissionFromCreate.ShouldNotBeNull();
         submissionFromCreate.Id.ShouldNotBe(Guid.Empty);
-        submissionFromCreate.Phase1CompletedAt.ShouldBeNull();
+        submissionFromCreate.Phase1CompletedAt.ShouldNotBeNull();
         submissionFromCreate.Phase2CompletedAt.ShouldBeNull();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
@@ -86,6 +87,20 @@ public class SubmissionsTests
         submissionFromGet.Id.ShouldBe(submissionFromCreate.Id);
         submissionFromGet.Phase1CompletedAt.ShouldNotBeNull();
         submissionFromGet.Phase2CompletedAt.ShouldNotBeNull();
+    }
+
+    [Test]
+    public async Task SlowResponseBeforePointOfNoReturnTest()
+    {
+        SetUpApiResponses(TimeSpan.FromSeconds(1.1), TimeSpan.FromSeconds(1.1));
+
+        using var httpClient = _factory.CreateClient();
+
+        var stopwatch = Stopwatch.StartNew();
+        var response = await httpClient.PostAsync("/submissions", new StringContent(string.Empty));
+        stopwatch.Stop();
+        response.StatusCode.ShouldBe(HttpStatusCode.GatewayTimeout);
+        stopwatch.ElapsedMilliseconds.ShouldBeInRange(1000, 1100);
     }
 
     private void SetUpApiResponses(TimeSpan phase1Delay, TimeSpan phase2Delay)
