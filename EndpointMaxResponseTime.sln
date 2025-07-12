@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndpointMaxResponseTime", "EndpointMaxResponseTime\EndpointMaxResponseTime.csproj", "{755F912A-58D9-4E51-B901-404C265CA15F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndpointMaxResponseTime.Tests", "EndpointMaxResponseTime.Tests\EndpointMaxResponseTime.Tests.csproj", "{3BD74107-C10F-4E15-A608-F5BE2B90A590}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{755F912A-58D9-4E51-B901-404C265CA15F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{755F912A-58D9-4E51-B901-404C265CA15F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{755F912A-58D9-4E51-B901-404C265CA15F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{755F912A-58D9-4E51-B901-404C265CA15F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BD74107-C10F-4E15-A608-F5BE2B90A590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BD74107-C10F-4E15-A608-F5BE2B90A590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BD74107-C10F-4E15-A608-F5BE2B90A590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BD74107-C10F-4E15-A608-F5BE2B90A590}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
