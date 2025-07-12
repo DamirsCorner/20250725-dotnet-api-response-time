@@ -13,7 +13,12 @@ public class SubmissionsController(
     [HttpPost]
     public async Task<IActionResult> Create()
     {
-        var submission = await submissionsService.CreateAsync();
+        var submissionId = await submissionsService.CreateAsync();
+        var submission = submissionsRepository.Get(submissionId);
+        if (!submission!.Phase2CompletedAt.HasValue)
+        {
+            return Accepted(submission);
+        }
         return Ok(submission);
     }
 

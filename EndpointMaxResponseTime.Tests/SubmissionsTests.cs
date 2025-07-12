@@ -71,12 +71,21 @@ public class SubmissionsTests
         stopwatch.Stop();
         response.EnsureSuccessStatusCode();
         var submissionFromCreate = await response.Content.ReadFromJsonAsync<Submission>();
-        stopwatch.ElapsedMilliseconds.ShouldBeGreaterThan(2000);
+        stopwatch.ElapsedMilliseconds.ShouldBeInRange(1000, 1100);
+        submissionFromCreate.ShouldNotBeNull();
+        submissionFromCreate.Id.ShouldNotBe(Guid.Empty);
+        submissionFromCreate.Phase1CompletedAt.ShouldBeNull();
+        submissionFromCreate.Phase2CompletedAt.ShouldBeNull();
+
+        await Task.Delay(TimeSpan.FromSeconds(1));
 
         var submissionFromGet = await httpClient.GetFromJsonAsync<Submission>(
-            $"/submissions/{submissionFromCreate?.Id}"
+            $"/submissions/{submissionFromCreate.Id}"
         );
-        submissionFromGet.ShouldBeEquivalentTo(submissionFromCreate);
+        submissionFromGet.ShouldNotBeNull();
+        submissionFromGet.Id.ShouldBe(submissionFromCreate.Id);
+        submissionFromGet.Phase1CompletedAt.ShouldNotBeNull();
+        submissionFromGet.Phase2CompletedAt.ShouldNotBeNull();
     }
 
     private void SetUpApiResponses(TimeSpan phase1Delay, TimeSpan phase2Delay)
